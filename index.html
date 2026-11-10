@@ -20,7 +20,26 @@ background:#111;
 color:white;
 border:2px solid red;
 }
-</style>
+#agent{
+width:128px;
+height:128px;
+margin:20px auto;
+background:url('agent.png') no-repeat;
+background-size:384px 128px;
+image-rendering:pixelated;
+}
+
+.agent-idle{
+background-position:0 0;
+}
+
+.agent-shoot{
+background-position:-128px 0;
+}
+
+.agent-hurt{
+background-position:-256px 0;
+}</style>
 </head>
 <body>
 
@@ -28,12 +47,35 @@ border:2px solid red;
 <p>The outbreak has begun.</p>
 
 <button onclick="startMission()">START</button>
-
+<button onclick="agentIdle()">IDLE</button>
+<button onclick="agentShoot()">SHOOT</button>
+<button onclick="agentHurt()">HURT</button>
+<div id="agent" class="agent agent-idle"></div>
 <p id="message"></p>
 
 <script>
 function startMission(){
 document.getElementById('message').textContent='Mission started. Agent Raze has landed on the island.';
+}
+const agent=document.getElementById('agent');
+
+function setAgent(pose){
+agent.className='agent '+pose;
+}
+
+function agentIdle(){
+setAgent('agent-idle');
+document.getElementById('message').textContent='Agent Raze is ready.';
+}
+
+function agentShoot(){
+setAgent('agent-shoot');
+document.getElementById('message').textContent='Agent Raze fires!';
+}
+
+function agentHurt(){
+setAgent('agent-hurt');
+document.getElementById('message').textContent='Agent Raze is injured!';
 }
 </script>
 
