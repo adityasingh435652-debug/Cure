@@ -21,24 +21,30 @@ color:white;
 border:2px solid red;
 }
 #agent{
-width:128px;
+width:96px;
 height:128px;
-margin:20px auto;
+margin:30px auto;
 background:url('Agent.png') no-repeat;
 background-size:384px 128px;
 image-rendering:pixelated;
-}
-
-.agent-idle{
 background-position:0 0;
 }
 
-.agent-shoot{
-background-position:-128px 0;
+.pose1{
+background-position:0 0;
 }
 
-.agent-hurt{
-background-position:-256px 0;
+.pose2{
+background-position:-96px 0;
+}
+
+.pose3{
+background-position:-192px 0;
+}
+
+.pose4{
+background-position:-288px 0;
+}
 }</style>
 </head>
 <body>
@@ -46,11 +52,11 @@ background-position:-256px 0;
 <h1>OPERATION CURE</h1>
 <p>The outbreak has begun.</p>
 
-<button onclick="startMission()">START</button>
-<button onclick="agentIdle()">IDLE</button>
-<button onclick="agentShoot()">SHOOT</button>
-<button onclick="agentHurt()">HURT</button>
-<div id="agent" class="agent agent-idle"></div>
+<button onclick="pose1()">POSE 1</button>
+<button onclick="pose2()">POSE 2</button>
+<button onclick="pose3()">POSE 3</button>
+<button onclick="pose4()">POSE 4</button>
+<div id="agent" class="pose1"></div> 
 <p id="message"></p>
 
 <script>
@@ -59,23 +65,24 @@ document.getElementById('message').textContent='Mission started. Agent Raze has 
 }
 const agent=document.getElementById('agent');
 
-function setAgent(pose){
-agent.className='agent '+pose;
+function setPose(number){
+agent.className='pose'+number;
 }
 
-function agentIdle(){
-setAgent('agent-idle');
-document.getElementById('message').textContent='Agent Raze is ready.';
+function pose1(){
+setPose(1);
 }
 
-function agentShoot(){
-setAgent('agent-shoot');
-document.getElementById('message').textContent='Agent Raze fires!';
+function pose2(){
+setPose(2);
 }
 
-function agentHurt(){
-setAgent('agent-hurt');
-document.getElementById('message').textContent='Agent Raze is injured!';
+function pose3(){
+setPose(3);
+}
+
+function pose4(){
+setPose(4);
 }
 </script>
 
