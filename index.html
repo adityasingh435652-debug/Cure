@@ -18,6 +18,8 @@ color:#e8f1ff;
 font-family:Arial,sans-serif;
 text-align:center;
 padding:20px;
+user-select:none;
+-webkit-user-select:none;
 }
 
 h1{
@@ -86,15 +88,14 @@ color:#ffffff;
 
 <button id="rifleButton">HOLD TO SHOOT RIFLE</button>
 
-<button id="injuredButton" onclick="injured()">INJURED</button>
+<button id="injuredButton">INJURED</button>
 
 <script>
 const agent=document.getElementById('agent');
 const handgunButton=document.getElementById('handgunButton');
 const rifleButton=document.getElementById('rifleButton');
+const injuredButton=document.getElementById('injuredButton');
 
-let weaponTimer=null;
-let frame=0;
 const handgunSound=new Audio('handgun-shot.mp3');
 const rifleSound=new Audio('rifle-shot.mp3');
 
@@ -103,6 +104,10 @@ rifleSound.preload='auto';
 
 handgunSound.load();
 rifleSound.load();
+
+let weaponTimer=null;
+let frame=0;
+
 function setPose(column,row){
 agent.style.backgroundPosition=(column-1)*-275+'px '+(row-1)*-384+'px';
 }
@@ -127,13 +132,8 @@ function handgunFire(){
 setPose(4,1);
 
 handgunSound.currentTime=0;
-
 handgunSound.play().catch(function(){
 });
-}
-
-function handgunRecoil(){
-setPose(5,1);
 }
 
 function rifleReady(){
@@ -148,13 +148,8 @@ function rifleFire(){
 setPose(3,2);
 
 rifleSound.currentTime=0;
-
 rifleSound.play().catch(function(){
 });
-}
-
-function rifleRecoil(){
-setPose(4,2);
 }
 
 function startHandgun(){
@@ -221,6 +216,8 @@ rifleButton.addEventListener('pointerdown',startRifle);
 rifleButton.addEventListener('pointerup',stopShooting);
 rifleButton.addEventListener('pointercancel',stopShooting);
 rifleButton.addEventListener('pointerleave',stopShooting);
+
+injuredButton.addEventListener('click',injured);
 
 handgunButton.addEventListener('contextmenu',function(event){
 event.preventDefault();
