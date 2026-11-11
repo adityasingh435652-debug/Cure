@@ -185,7 +185,7 @@ bullet.className='bullet rifleBullet';
 }
 
 bullet.style.left='300px';
-bullet.style.bottom='180px';
+bullet.style.bottom='250px';
 
 gameArea.appendChild(bullet);
 
@@ -260,6 +260,9 @@ rifleAim();
 function stopShooting(){
 clearInterval(weaponTimer);
 weaponTimer=null;
+
+handgunSound.pause();
+handgunSound.currentTime=0;
 
 idle();
 }
