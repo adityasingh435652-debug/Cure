@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operation Cure</title>
+<title>Operation Cure - Sprite Test</title>
 <style>
 *{
 margin:0;
@@ -21,36 +21,34 @@ padding:20px;
 }
 
 h1{
-font-size:28px;
+font-size:24px;
 color:#00ff9d;
-margin-top:20px;
-letter-spacing:2px;
+margin-bottom:10px;
 }
 
 p{
-margin-top:10px;
 color:#9fb3c8;
+margin-bottom:20px;
 }
 
 #agent{
-width:64px;
-height:128px;
-margin:30px auto;
+width:275px;
+height:384px;
+margin:0 auto 20px;
 background:url('Agent.png') no-repeat;
-background-size:384px 128px;
+background-size:1375px 768px;
 background-position:0 0;
 image-rendering:pixelated;
 }
 
 button{
-display:block;
-width:100%;
-max-width:320px;
-margin:10px auto;
-padding:15px;
+display:inline-block;
+width:80px;
+margin:5px;
+padding:12px 0;
 border:none;
 border-radius:8px;
-font-size:18px;
+font-size:16px;
 font-weight:bold;
 color:#04121a;
 background:#00ff9d;
@@ -59,86 +57,47 @@ background:#00ff9d;
 button:active{
 background:#00c97d;
 }
-
-#injuredButton{
-background:#ff5252;
-color:#ffffff;
-}
-
-#handgunButton{
-background:#ffd400;
-color:#241c00;
-}
 </style>
 </head>
 <body>
 
-<h1>OPERATION CURE</h1>
-<p>Hold SHOOT to fire continuously.</p>
+<h1>SPRITE TEST</h1>
+<p>Tap each button. Tell me what appears in every pose.</p>
 
 <div id="agent"></div>
 
-<button id="shootButton">HOLD TO SHOOT</button>
+<button onclick="pose1()">1</button>
+<button onclick="pose2()">2</button>
+<button onclick="pose3()">3</button>
+<button onclick="pose4()">4</button>
+<button onclick="pose5()">5</button>
 
-<button id="injuredButton" onclick="injured()">INJURED</button>
+<br>
 
-<button id="handgunButton" onclick="handgun()">HANDGUN</button>
+<button onclick="pose6()">6</button>
+<button onclick="pose7()">7</button>
+<button onclick="pose8()">8</button>
+<button onclick="pose9()">9</button>
+<button onclick="pose10()">10</button>
 
 <script>
 const agent=document.getElementById('agent');
-const shootButton=document.getElementById('shootButton');
 
-let shootTimer=null;
-let frame=0;
-
-function setPose(number){
-agent.style.backgroundPosition=(number-1)*-64+'px 0';
+function setPose(column,row){
+agent.style.backgroundPosition=(column-1)*-275+'px '+(row-1)*-384+'px';
 }
 
-function idle(){
-setPose(1);
-}
+function pose1(){setPose(1,1);}
+function pose2(){setPose(2,1);}
+function pose3(){setPose(3,1);}
+function pose4(){setPose(4,1);}
+function pose5(){setPose(5,1);}
 
-function injured(){
-setPose(5);
-}
-
-function handgun(){
-setPose(6);
-}
-
-function nextFiringFrame(){
-frame=frame+1;
-
-if(frame>3){
-frame=1;
-}
-
-setPose(frame+1);
-}
-
-function startShooting(){
-if(shootTimer!==null){
-return;
-}
-
-frame=0;
-nextFiringFrame();
-
-shootTimer=setInterval(nextFiringFrame,150);
-}
-
-function stopShooting(){
-clearInterval(shootTimer);
-shootTimer=null;
-
-idle();
-}
-
-shootButton.addEventListener('pointerdown',startShooting);
-shootButton.addEventListener('pointerup',stopShooting);
-shootButton.addEventListener('pointercancel',stopShooting);
-shootButton.addEventListener('pointerleave',stopShooting);
+function pose6(){setPose(1,2);}
+function pose7(){setPose(2,2);}
+function pose8(){setPose(3,2);}
+function pose9(){setPose(4,2);}
+function pose10(){setPose(5,2);}
 </script>
 
 </body>
