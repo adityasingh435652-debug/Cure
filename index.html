@@ -97,13 +97,10 @@ const rifleButton=document.getElementById('rifleButton');
 const injuredButton=document.getElementById('injuredButton');
 
 const handgunSound=new Audio('handgun-shot.mp3');
-const rifleSound=new Audio('rifle-shot.mp3');
 
 handgunSound.preload='auto';
-rifleSound.preload='auto';
 
 handgunSound.load();
-rifleSound.load();
 
 let weaponTimer=null;
 let frame=0;
@@ -146,10 +143,6 @@ setPose(2,2);
 
 function rifleFire(){
 setPose(3,2);
-
-rifleSound.currentTime=0;
-rifleSound.play().catch(function(){
-});
 }
 
 function startHandgun(){
