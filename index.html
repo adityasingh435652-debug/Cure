@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operation Cure - Sprite Test</title>
+<title>Operation Cure</title>
 <style>
 *{
 margin:0;
@@ -21,9 +21,10 @@ padding:20px;
 }
 
 h1{
-font-size:24px;
+font-size:26px;
 color:#00ff9d;
 margin-bottom:10px;
+letter-spacing:2px;
 }
 
 p{
@@ -42,13 +43,14 @@ image-rendering:pixelated;
 }
 
 button{
-display:inline-block;
-width:80px;
-margin:5px;
-padding:12px 0;
+display:block;
+width:100%;
+max-width:320px;
+margin:10px auto;
+padding:15px;
 border:none;
 border-radius:8px;
-font-size:16px;
+font-size:18px;
 font-weight:bold;
 color:#04121a;
 background:#00ff9d;
@@ -57,47 +59,151 @@ background:#00ff9d;
 button:active{
 background:#00c97d;
 }
+
+#rifleButton{
+background:#ffd400;
+color:#241c00;
+}
+
+#injuredButton{
+background:#ff5252;
+color:#ffffff;
+}
 </style>
 </head>
 <body>
 
-<h1>SPRITE TEST</h1>
-<p>Tap each button. Tell me what appears in every pose.</p>
+<h1>OPERATION CURE</h1>
+<p>Hold a weapon button to keep firing.</p>
 
 <div id="agent"></div>
 
-<button onclick="pose1()">1</button>
-<button onclick="pose2()">2</button>
-<button onclick="pose3()">3</button>
-<button onclick="pose4()">4</button>
-<button onclick="pose5()">5</button>
+<button id="handgunButton">HOLD TO SHOOT HANDGUN</button>
 
-<br>
+<button id="rifleButton">HOLD TO SHOOT RIFLE</button>
 
-<button onclick="pose6()">6</button>
-<button onclick="pose7()">7</button>
-<button onclick="pose8()">8</button>
-<button onclick="pose9()">9</button>
-<button onclick="pose10()">10</button>
+<button id="injuredButton" onclick="injured()">INJURED</button>
 
 <script>
 const agent=document.getElementById('agent');
+const handgunButton=document.getElementById('handgunButton');
+const rifleButton=document.getElementById('rifleButton');
+
+let weaponTimer=null;
+let frame=0;
 
 function setPose(column,row){
 agent.style.backgroundPosition=(column-1)*-275+'px '+(row-1)*-384+'px';
 }
 
-function pose1(){setPose(1,1);}
-function pose2(){setPose(2,1);}
-function pose3(){setPose(3,1);}
-function pose4(){setPose(4,1);}
-function pose5(){setPose(5,1);}
+function idle(){
+setPose(1,1);
+}
 
-function pose6(){setPose(1,2);}
-function pose7(){setPose(2,2);}
-function pose8(){setPose(3,2);}
-function pose9(){setPose(4,2);}
-function pose10(){setPose(5,2);}
+function injured(){
+setPose(5,2);
+}
+
+function handgunReady(){
+setPose(2,1);
+}
+
+function handgunAim(){
+setPose(3,1);
+}
+
+function handgunFire(){
+setPose(4,1);
+}
+
+function handgunRecoil(){
+setPose(5,1);
+}
+
+function rifleReady(){
+setPose(1,2);
+}
+
+function rifleAim(){
+setPose(2,2);
+}
+
+function rifleFire(){
+setPose(3,2);
+}
+
+function rifleRecoil(){
+setPose(4,2);
+}
+
+function startHandgun(){
+if(weaponTimer!==null){
+return;
+}
+
+frame=0;
+
+handgunReady();
+
+weaponTimer=setInterval(function(){
+frame=frame+1;
+
+if(frame===1){
+handgunAim();
+}else if(frame===2){
+handgunFire();
+}else if(frame===3){
+handgunRecoil();
+}else{
+frame=0;
+handgunAim();
+}
+
+},200);
+}
+
+function startRifle(){
+if(weaponTimer!==null){
+return;
+}
+
+frame=0;
+
+rifleReady();
+
+weaponTimer=setInterval(function(){
+frame=frame+1;
+
+if(frame===1){
+rifleAim();
+}else if(frame===2){
+rifleFire();
+}else if(frame===3){
+rifleRecoil();
+}else{
+frame=0;
+rifleAim();
+}
+
+},200);
+}
+
+function stopShooting(){
+clearInterval(weaponTimer);
+weaponTimer=null;
+
+idle();
+}
+
+handgunButton.addEventListener('pointerdown',startHandgun);
+handgunButton.addEventListener('pointerup',stopShooting);
+handgunButton.addEventListener('pointercancel',stopShooting);
+handgunButton.addEventListener('pointerleave',stopShooting);
+
+rifleButton.addEventListener('pointerdown',startRifle);
+rifleButton.addEventListener('pointerup',stopShooting);
+rifleButton.addEventListener('pointercancel',stopShooting);
+rifleButton.addEventListener('pointerleave',stopShooting);
 </script>
 
 </body>
