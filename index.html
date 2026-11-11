@@ -20,28 +20,59 @@ text-align:center;
 padding:20px;
 user-select:none;
 -webkit-user-select:none;
+overflow:hidden;
 }
 
 h1{
-font-size:26px;
+font-size:24px;
 color:#00ff9d;
 margin-bottom:10px;
 letter-spacing:2px;
 }
 
-p{
-color:#9fb3c8;
-margin-bottom:20px;
+#gameArea{
+position:relative;
+width:100%;
+max-width:400px;
+height:420px;
+margin:0 auto;
+background:#101820;
+border:3px solid #00ff9d;
+border-radius:12px;
+overflow:hidden;
 }
 
 #agent{
+position:absolute;
+left:20px;
+bottom:20px;
 width:275px;
 height:384px;
-margin:0 auto 20px;
 background:url('Agent.png') no-repeat;
 background-size:1375px 768px;
 background-position:0 0;
 image-rendering:pixelated;
+}
+
+.bullet{
+position:absolute;
+width:18px;
+height:6px;
+border-radius:3px;
+}
+
+.handgunBullet{
+background:#ffd400;
+box-shadow:0 0 8px #ffd400;
+}
+
+.rifleBullet{
+background:#00d9ff;
+box-shadow:0 0 8px #00d9ff;
+}
+
+#weaponButtons{
+margin-top:15px;
 }
 
 button{
@@ -71,37 +102,36 @@ background:#ffd400;
 color:#241c00;
 }
 
-#injuredButton{
-background:#ff5252;
-color:#ffffff;
+#switchButton{
+background:#00a2ff;
+color:#00121a;
 }
 </style>
 </head>
 <body>
 
 <h1>OPERATION CURE</h1>
-<p>Hold a weapon button to keep firing.</p>
 
+<div id="gameArea">
 <div id="agent"></div>
+</div>
 
-<button id="handgunButton">HOLD TO SHOOT HANDGUN</button>
-
-<button id="rifleButton">HOLD TO SHOOT RIFLE</button>
-
-<button id="injuredButton">INJURED</button>
+<div id="weaponButtons">
+<button id="switchButton">WEAPON: HANDGUN</button>
+<button id="handgunButton">HOLD TO SHOOT</button>
+</div>
 
 <script>
 const agent=document.getElementById('agent');
+const gameArea=document.getElementById('gameArea');
 const handgunButton=document.getElementById('handgunButton');
-const rifleButton=document.getElementById('rifleButton');
-const injuredButton=document.getElementById('injuredButton');
+const switchButton=document.getElementById('switchButton');
 
 const handgunSound=new Audio('handgun-shot.mp3');
-
 handgunSound.preload='auto';
-
 handgunSound.load();
 
+let currentWeapon='handgun';
 let weaponTimer=null;
 let frame=0;
 
@@ -111,10 +141,6 @@ agent.style.backgroundPosition=(column-1)*-275+'px '+(row-1)*-384+'px';
 
 function idle(){
 setPose(1,1);
-}
-
-function injured(){
-setPose(5,2);
 }
 
 function handgunReady(){
@@ -131,6 +157,8 @@ setPose(4,1);
 handgunSound.currentTime=0;
 handgunSound.play().catch(function(){
 });
+
+createBullet('handgun');
 }
 
 function rifleReady(){
@@ -143,15 +171,58 @@ setPose(2,2);
 
 function rifleFire(){
 setPose(3,2);
+
+createBullet('rifle');
 }
 
-function startHandgun(){
+function createBullet(weapon){
+const bullet=document.createElement('div');
+
+if(weapon==='handgun'){
+bullet.className='bullet handgunBullet';
+}else{
+bullet.className='bullet rifleBullet';
+}
+
+bullet.style.left='300px';
+bullet.style.bottom='180px';
+
+gameArea.appendChild(bullet);
+
+let bulletPosition=300;
+
+const bulletTimer=setInterval(function(){
+bulletPosition=bulletPosition+12;
+bullet.style.left=bulletPosition+'px';
+
+if(bulletPosition>420){
+clearInterval(bulletTimer);
+bullet.remove();
+}
+},20);
+}
+
+function switchWeapon(){
+if(currentWeapon==='handgun'){
+currentWeapon='rifle';
+switchButton.textContent='WEAPON: RIFLE';
+}else{
+currentWeapon='handgun';
+switchButton.textContent='WEAPON: HANDGUN';
+}
+
+stopShooting();
+idle();
+}
+
+function startShooting(){
 if(weaponTimer!==null){
 return;
 }
 
 frame=0;
 
+if(currentWeapon==='handgun'){
 handgunReady();
 
 weaponTimer=setInterval(function(){
@@ -167,15 +238,7 @@ handgunAim();
 }
 
 },100);
-}
-
-function startRifle(){
-if(weaponTimer!==null){
-return;
-}
-
-frame=0;
-
+}else{
 rifleReady();
 
 weaponTimer=setInterval(function(){
@@ -190,7 +253,8 @@ frame=0;
 rifleAim();
 }
 
-},100);
+},70);
+}
 }
 
 function stopShooting(){
@@ -200,27 +264,18 @@ weaponTimer=null;
 idle();
 }
 
-handgunButton.addEventListener('pointerdown',startHandgun);
+handgunButton.addEventListener('pointerdown',startShooting);
 handgunButton.addEventListener('pointerup',stopShooting);
 handgunButton.addEventListener('pointercancel',stopShooting);
 handgunButton.addEventListener('pointerleave',stopShooting);
 
-rifleButton.addEventListener('pointerdown',startRifle);
-rifleButton.addEventListener('pointerup',stopShooting);
-rifleButton.addEventListener('pointercancel',stopShooting);
-rifleButton.addEventListener('pointerleave',stopShooting);
-
-injuredButton.addEventListener('click',injured);
+switchButton.addEventListener('click',switchWeapon);
 
 handgunButton.addEventListener('contextmenu',function(event){
 event.preventDefault();
 });
 
-rifleButton.addEventListener('contextmenu',function(event){
-event.preventDefault();
-});
-
-injuredButton.addEventListener('contextmenu',function(event){
+switchButton.addEventListener('contextmenu',function(event){
 event.preventDefault();
 });
 </script>
