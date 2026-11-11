@@ -36,10 +36,24 @@ width:100%;
 max-width:400px;
 height:420px;
 margin:0 auto;
-background:#101820;
+background-color:#101820;
+background-image:url('background.png');
+background-size:auto 100%;
+background-position:0 0;
+background-repeat:repeat-x;
 border:3px solid #00ff9d;
 border-radius:12px;
 overflow:hidden;
+animation:moveBackground 30s linear infinite;
+}
+
+@keyframes moveBackground{
+from{
+background-position:0 0;
+}
+to{
+background-position:-3072px 0;
+}
 }
 
 #agent{
