@@ -1,79 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Sprite Test</title>
+<title>Operation Cure</title>
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-background:#000;
-color:#fff;
-font-family:monospace;
+min-height:100vh;
+background:#0b0f14;
+color:#e8f1ff;
+font-family:Arial,sans-serif;
 text-align:center;
 padding:20px;
+}
+
+h1{
+font-size:28px;
+color:#00ff9d;
+margin-top:20px;
+letter-spacing:2px;
+}
+
+p{
+margin-top:10px;
+color:#9fb3c8;
 }
 
 #agent{
 width:64px;
 height:128px;
-margin:20px auto;
+margin:30px auto;
 background:url('Agent.png') no-repeat;
 background-size:384px 128px;
-image-rendering:pixelated;
 background-position:0 0;
+image-rendering:pixelated;
 }
 
 button{
 display:block;
-width:180px;
-margin:8px auto;
-padding:10px;
-font-size:15px;
-background:#111;
-color:#fff;
-border:2px solid red;
+width:100%;
+max-width:320px;
+margin:10px auto;
+padding:15px;
+border:none;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+color:#04121a;
+background:#00ff9d;
+}
+
+button:active{
+background:#00c97d;
+}
+
+#injuredButton{
+background:#ff5252;
+color:#ffffff;
+}
+
+#handgunButton{
+background:#ffd400;
+color:#241c00;
 }
 </style>
 </head>
 <body>
 
-<h1>AGENT TEST</h1>
+<h1>OPERATION CURE</h1>
+<p>Hold SHOOT to fire continuously.</p>
 
 <div id="agent"></div>
 
-<button onclick="pose1()">POSE 1</button>
-<button onclick="pose2()">POSE 2</button>
-<button onclick="pose3()">POSE 3</button>
-<button onclick="pose4()">POSE 4</button>
-<button onclick="pose5()">POSE 5</button>
-<button onclick="pose6()">POSE 6</button>
+<button id="shootButton">HOLD TO SHOOT</button>
+
+<button id="injuredButton" onclick="injured()">INJURED</button>
+
+<button id="handgunButton" onclick="handgun()">HANDGUN</button>
 
 <script>
 const agent=document.getElementById('agent');
+const shootButton=document.getElementById('shootButton');
 
-function pose1(){
-agent.style.backgroundPosition='0 0';
+let shootTimer=null;
+let frame=0;
+
+function setPose(number){
+agent.style.backgroundPosition=(number-1)*-64+'px 0';
 }
 
-function pose2(){
-agent.style.backgroundPosition='-64px 0';
+function idle(){
+setPose(1);
 }
 
-function pose3(){
-agent.style.backgroundPosition='-128px 0';
+function injured(){
+setPose(5);
 }
 
-function pose4(){
-agent.style.backgroundPosition='-192px 0';
+function handgun(){
+setPose(6);
 }
 
-function pose5(){
-agent.style.backgroundPosition='-256px 0';
+function nextFiringFrame(){
+frame=frame+1;
+
+if(frame>3){
+frame=1;
 }
 
-function pose6(){
-agent.style.backgroundPosition='-320px 0';
+setPose(frame+1);
 }
+
+function startShooting(){
+if(shootTimer!==null){
+return;
+}
+
+frame=0;
+nextFiringFrame();
+
+shootTimer=setInterval(nextFiringFrame,150);
+}
+
+function stopShooting(){
+clearInterval(shootTimer);
+shootTimer=null;
+
+idle();
+}
+
+shootButton.addEventListener('pointerdown',startShooting);
+shootButton.addEventListener('pointerup',stopShooting);
+shootButton.addEventListener('pointercancel',stopShooting);
+shootButton.addEventListener('pointerleave',stopShooting);
 </script>
 
 </body>
