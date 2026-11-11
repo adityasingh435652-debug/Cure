@@ -54,6 +54,10 @@ font-size:18px;
 font-weight:bold;
 color:#04121a;
 background:#00ff9d;
+user-select:none;
+-webkit-user-select:none;
+touch-action:none;
+-webkit-touch-callout:none;
 }
 
 button:active{
@@ -204,6 +208,18 @@ rifleButton.addEventListener('pointerdown',startRifle);
 rifleButton.addEventListener('pointerup',stopShooting);
 rifleButton.addEventListener('pointercancel',stopShooting);
 rifleButton.addEventListener('pointerleave',stopShooting);
+
+handgunButton.addEventListener('contextmenu',function(event){
+event.preventDefault();
+});
+
+rifleButton.addEventListener('contextmenu',function(event){
+event.preventDefault();
+});
+
+injuredButton.addEventListener('contextmenu',function(event){
+event.preventDefault();
+});
 </script>
 
 </body>
