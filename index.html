@@ -95,7 +95,8 @@ const rifleButton=document.getElementById('rifleButton');
 
 let weaponTimer=null;
 let frame=0;
-
+const handgunSound=new Audio('handgun-shot.mp3');
+const rifleSound=new Audio('rifle-shot.mp3');
 function setPose(column,row){
 agent.style.backgroundPosition=(column-1)*-275+'px '+(row-1)*-384+'px';
 }
@@ -118,6 +119,8 @@ setPose(3,1);
 
 function handgunFire(){
 setPose(4,1);
+handgunSound.currentTime=0;
+handgunSound.play();
 }
 
 function handgunRecoil(){
@@ -134,6 +137,8 @@ setPose(2,2);
 
 function rifleFire(){
 setPose(3,2);
+rifleSound.currentTime=0;
+rifleSound.play();
 }
 
 function rifleRecoil(){
